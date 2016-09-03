@@ -1,5 +1,7 @@
 # BerriartAPMBundle
 
+[![Build Status](https://travis-ci.org/artberri/BerriartAPMBundle.svg?branch=master)](https://travis-ci.org/artberri/BerriartAPMBundle)
+
 Seamless integration between APM (Application Performance Monitoring) services and Symfony projects.
 
 ## Summary
@@ -17,9 +19,9 @@ Features include:
 
 - **Multi APM support**: you can use as many APM providers as you want. Usually only one is used but is usefull
 for migrations. If you APM provider is not supported by this bundle you can create your own and contribute to the project
-or make us a suggestion. 
+or make us a suggestion.
 - **Request monitoring**: Every request is tracked including: status code, url, duration, memory usage,
-constroller and symfony route name. 
+constroller and symfony route name.
 - **Exception tracking**: Every Symfony exception is tracked.
 
 ## Documentation
