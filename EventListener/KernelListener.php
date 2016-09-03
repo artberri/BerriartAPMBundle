@@ -24,27 +24,26 @@ class KernelListener
 
     /**
      * Handles the onKernelException event.
-     * 
+     *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
 
-        if (!$exception instanceOf HttpExceptionInterface)
-        {
+        if (!$exception instanceof HttpExceptionInterface) {
             $this->handler->trackException($exception);
         }
     }
 
     /**
      * Handles the onKernelResponse event.
-     * 
+     *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        
+
         if ($this->isTrackableRequest($event)) {
             $this->handler->trackRequest($event);
         }

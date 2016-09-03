@@ -19,20 +19,20 @@ class ProcessorHandlerPass implements CompilerPassInterface
         $processors = $container->getParameter('berriart_apm.processors');
 
         foreach ($processors as $processor) {
-            $serviceId = 'berriart_apm.processor.' . $processor;
+            $serviceId = 'berriart_apm.processor.'.$processor;
 
-            if ($container->hasAlias($serviceId) || $container->hasDefinition($serviceId)) {
-                $definition->addMethodCall(
-                    'addProcessor',
-                    array(new Reference($serviceId))
-                );
-                $processorDefintion = $container->getDefinition($serviceId);
-                $processorDefintion->addMethodCall( 'configure', array( $container->getParameter('berriart_apm.config.' . $processor) ) );
-            } else {
+            if (!$container->hasAlias($serviceId) && !$container->hasDefinition($serviceId)) {
                 throw new InvalidAPMProcessorException(
-                    'APM processor not found. Make sure you have configured an APM processor (service) called "' . $serviceId . '" or double check your "berriart_apm" configuration.'
+                    'APM processor not found. Make sure you have configured an APM processor (service) called "'.$serviceId.'" or double check your "berriart_apm" configuration.'
                 );
             }
+
+            $definition->addMethodCall(
+                'addProcessor',
+                array(new Reference($serviceId))
+            );
+            $processorDefintion = $container->getDefinition($serviceId);
+            $processorDefintion->addMethodCall('configure', array( $container->getParameter('berriart_apm.config.'.$processor)));
         }
     }
 }

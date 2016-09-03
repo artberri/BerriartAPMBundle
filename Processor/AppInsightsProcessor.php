@@ -19,7 +19,7 @@ class AppInsightsProcessor implements ProcessorInterface
     {
         $this->client = new Client();
         $this->client->getContext()->setInstrumentationKey($config['api_key']);
-        $this->stopwatch = new Stopwatch();        
+        $this->stopwatch = new Stopwatch();
     }
 
     public function trackException(\Exception $exception)
@@ -38,35 +38,35 @@ class AppInsightsProcessor implements ProcessorInterface
         $request = $event->getRequest();
         $response = $event->getResponse();
 
-        $durationInMilliseconds = 0;
+        $duration = 0;
         $memoryUsage = 0;
         if ($this->stopwatch->isStarted(self::WATCH_NAME)) {
             $profile = $this->stopwatch->stop(self::WATCH_NAME);
-            $durationInMilliseconds = $profile->getDuration();
+            $duration = $profile->getDuration();
             $memoryUsage = $profile->getMemory();
         }
 
         $name = $request->get('_route') ?: 'unknown';
-        $url = $request->getSchemeAndHttpHost() . $event->getRequest()->getRequestUri();
+        $url = $request->getSchemeAndHttpHost().$event->getRequest()->getRequestUri();
         $startTime = $request->server->get('REQUEST_TIME');
         $httpResponseCode = $response->getStatusCode();
         $isSuccessful = $response->isSuccessful();
         $controllerName = $this->getControllerName($request);
 
         $this->client->trackRequest(
-            $name, 
-            $url, 
-            $startTime, 
-            $durationInMilliseconds, 
-            $httpResponseCode, 
-            $isSuccessful, 
-            $properties = array(
+            $name,
+            $url,
+            $startTime,
+            $duration,
+            $httpResponseCode,
+            $isSuccessful,
+            array(
                 'Symfony Controller' => $controllerName,
                 'Symfony Route' => $name,
-            ), 
-            $measurements = array(
+            ),
+            array(
                 'Memory Usage' => $memoryUsage,
-                
+
             )
         );
         $this->client->flush();

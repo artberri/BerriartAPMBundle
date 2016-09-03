@@ -30,7 +30,7 @@ class BerriartAPMExtension extends Extension
 
             foreach ($config['processors'] as $name => $processor) {
                 $processors[$processor['priority']][] = $name;
-                $container->setParameter('berriart_apm.config.' . $name, $processor);
+                $container->setParameter('berriart_apm.config.'.$name, $processor);
             }
 
             ksort($processors);

@@ -17,7 +17,6 @@ class ProcessorHandler implements ProcessorHandlerInterface, ProcessorInterface
 
     public function configure($config)
     {
-
     }
 
     public function addProcessor(ProcessorInterface $processor)

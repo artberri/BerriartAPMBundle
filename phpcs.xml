@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ruleset name="BerriartAMPBundle">
+    <description>BerriartAMPBundle PHP Coding Standard</description>
+
+    <file>./</file>
+    <exclude-pattern>*/Resources/*</exclude-pattern>
+    <exclude-pattern>vendor/*</exclude-pattern>
+
+    <rule ref="Symfony2"/>
+
+    <rule ref="Symfony2.Commenting.ClassComment">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+
+    <rule ref="Symfony2.Commenting.FunctionComment">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+
+</ruleset>
