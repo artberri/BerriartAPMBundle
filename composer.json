@@ -1,0 +1,32 @@
+{
+    "name": "berriart/apm-bundle",
+    "description": "This bundle integrates Symfony with multiple APM (Application Performance Monitoring) systems",
+    "keywords": ["apm", "performance", "monitoring"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alberto Varela",
+            "email": "alberto@berriart.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/framework-bundle": ">=2.6|~3.0",
+        "symfony/stopwatch": ">=2.6|~3.0",
+        "microsoft/application-insights": "~0.3"
+    },
+    "require-dev": {
+        "phpmd/phpmd" : "@stable",
+        "squizlabs/php_codesniffer": "2.*",
+        "pdepend/pdepend" : "2.2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Berriart\\Bundle\\APMBundle\\": ""
+        }
+    },
+    "support": {
+        "docs": "https://github.com/artberri/BerriartAPMBundle/"
+    }
+}
