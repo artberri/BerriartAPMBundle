@@ -2,8 +2,6 @@
 
 namespace Berriart\Bundle\APMBundle\Model;
 
-use Berriart\Bundle\APMBundle\Exception\InvalidPropertyException;
-
 class Request extends AbstractModel
 {
     protected $data = array(

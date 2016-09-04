@@ -2,9 +2,6 @@
 
 namespace Berriart\Bundle\APMBundle\Client;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\PostResponseEvent;
-
 interface ClientInterface extends BaseClientInterface
 {
     /**

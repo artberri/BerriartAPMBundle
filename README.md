@@ -1,6 +1,11 @@
 # BerriartAPMBundle
 
 [![Build Status](https://travis-ci.org/artberri/BerriartAPMBundle.svg?branch=master)](https://travis-ci.org/artberri/BerriartAPMBundle)
+[![Latest Stable Version](https://poser.pugx.org/berriart/apm-bundle/v/stable)](https://packagist.org/packages/berriart/apm-bundle)
+[![Total Downloads](https://poser.pugx.org/berriart/apm-bundle/downloads)](https://packagist.org/packages/berriart/apm-bundle)
+[![Latest Unstable Version](https://poser.pugx.org/berriart/apm-bundle/v/unstable)](https://packagist.org/packages/berriart/apm-bundle)
+[![License](https://poser.pugx.org/berriart/apm-bundle/license)](https://packagist.org/packages/berriart/apm-bundle)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/2e4039b2-7545-4e02-a229-a54081905199/mini.png)](https://insight.sensiolabs.com/projects/2e4039b2-7545-4e02-a229-a54081905199)
 
 Seamless integration between APM (Application Performance Monitoring) services and Symfony projects.
 
