@@ -111,6 +111,11 @@ $ ./vendor/bin/phpcs
 $ ./vendor/bin/phpcpd ./ --exclude=vendor
 ```
 
+When reporting a bug, it may be a good idea to reproduce it in a basic project
+built using the [Symfony Standard Edition](https://github.com/symfony/symfony-standard)
+to allow developers of the bundle to reproduce the issue by simply cloning it
+and following some steps.
+
 ### Step 6: Push
 
 ```text

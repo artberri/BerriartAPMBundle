@@ -39,19 +39,10 @@ All the installation instructions are located in the [documentation folder](Reso
 
 This bundle is available under the [MIT License](LICENSE).
 
-## Contributing
+## Reporting an issue or a feature request and contributing
 
 See the [contributing guide](CONTRIBUTING.md).
 
 # About
 
 BerriartAPMBundle is a [Berriart](http://www.berriart.com) initiative.
-
-## Reporting an issue or a feature request
-
-Issues and feature requests are tracked in the [Github issue tracker](https://github.com/artberri/BerriartAPMBundle/issues).
-
-When reporting a bug, it may be a good idea to reproduce it in a basic project
-built using the [Symfony Standard Edition](https://github.com/symfony/symfony-standard)
-to allow developers of the bundle to reproduce the issue by simply cloning it
-and following some steps.
