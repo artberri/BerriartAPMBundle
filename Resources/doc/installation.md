@@ -81,4 +81,5 @@ of the bundle.
 
 The following documents are available:
 
+- [APM Service Wrapper Usage](client_usage.md).
 - [Command Usage](commands.md).

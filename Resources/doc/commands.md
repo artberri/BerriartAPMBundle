@@ -25,3 +25,10 @@ For example if you wanted to send a deployment message, you would run the comman
 ```bash
 $ php bin/console apm:track:message "Release v1.4.2"
 ```
+
+## Other documentation
+
+The following documents are available:
+
+- [Installation](installation.md).
+- [APM Service Wrapper Usage](client_usage.md).

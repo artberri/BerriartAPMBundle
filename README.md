@@ -45,6 +45,7 @@ or make us a suggestion.
 The source of the documentation is stored in the `Resources/doc/` folder in this bundle:
 
 - [Installation](Resources/doc/installation.md).
+- [APM Service Wrapper Usage](Resources/doc/client_usage.md).
 - [Command Line Tools](Resources/doc/commands.md).
 
 ## Installation
