@@ -2,10 +2,9 @@
 
 namespace Berriart\Bundle\APMBundle\Client;
 
-use Berriart\Bundle\APMBundle\Model\Request;
 use ApplicationInsights\Telemetry_Client as Client;
 
-class AppInsightsClient implements ClientInterface
+class AppInsightsClient extends AbstractClient implements ClientInterface
 {
     protected $client;
 
@@ -20,31 +19,81 @@ class AppInsightsClient implements ClientInterface
         return $this->client;
     }
 
-    public function trackException(\Exception $exception)
+    public function trackException(\Exception $exception, $properties = array(), $measurements = array())
     {
-        $this->client->trackException($exception);
+        $properties = $this->addDefaultProperties($properties);
+        $this->client->trackException($exception, $properties, $measurements);
         $this->client->flush();
     }
 
-    public function trackRequest(Request $request)
+    public function trackRequest($name, $url, $startTime, $duration, $properties = array(), $measurements = array())
     {
-        $this->client->trackRequest(
-            $request->name,
-            $request->url,
-            $request->startTime,
-            $request->duration,
-            $request->httpResponseCode,
-            $request->isSuccessful,
-            array(
-                'Symfony Controller' => $request->controller,
-                'Symfony Route' => $request->route,
-                'Symfony Environment' => $request->environment,
-            ),
-            array(
-                'Memory Usage' => $request->memory,
+        $customProperties = array();
 
-            )
+        $propertyNames = array('httpResponseCode', 'isSuccessful');
+        $customProperties = $this->splitArray($propertyNames, $properties);
+        $properties = $this->addDefaultProperties($properties);
+
+        $this->client->trackRequest(
+            $name,
+            $url,
+            $startTime,
+            $duration,
+            $customProperties['httpResponseCode'],
+            $customProperties['isSuccessful'],
+            $properties,
+            $measurements
         );
         $this->client->flush();
+    }
+
+    public function trackMetric($name, $value, $properties = array())
+    {
+        $propertyNames = array('type', 'count', 'min', 'max', 'stdDev');
+        $customProperties = $this->splitArray($propertyNames, $properties);
+        $properties = $this->addDefaultProperties($properties);
+
+        $this->client->trackMetric(
+            $name,
+            $value,
+            $customProperties['type'],
+            $customProperties['count'],
+            $customProperties['min'],
+            $customProperties['max'],
+            $customProperties['stdDev'],
+            $properties
+        );
+        $this->client->flush();
+    }
+
+    public function trackEvent($name, $properties = array(), $measurements = array())
+    {
+        $properties = $this->addDefaultProperties($properties);
+
+        $this->client->trackEvent($name, $properties, $measurements);
+        $this->client->flush();
+    }
+
+    public function trackMessage($message, $properties = array())
+    {
+        $properties = $this->addDefaultProperties($properties);
+
+        $this->client->trackEvent($message, $properties);
+        $this->client->flush();
+    }
+
+    protected function splitArray($propertyNames, &$properties)
+    {
+        $customProperties = array();
+
+        foreach ($propertyNames as $name) {
+            $customProperties[$name] = null;
+            if (isset($properties[$name])) {
+                $customProperties[$name] = $properties[$name];
+                unset($properties[$name]);
+            }
+        }
+
+        return $customProperties;
     }
 }

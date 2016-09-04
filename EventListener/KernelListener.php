@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Berriart\Bundle\APMBundle\Client\ClientHandlerInterface;
-use Berriart\Bundle\APMBundle\Model\Request as APMRequest;
 
 /**
  * Tracks exceptions on APM
@@ -69,37 +68,30 @@ class KernelListener
     public function onKernelTerminate(PostResponseEvent $event)
     {
         if ($this->rules['requests'] && $this->isTrackableRequest($event)) {
-            $apmRequest = new APMRequest();
-
             $request = $event->getRequest();
             $response = $event->getResponse();
 
             $route = $request->get('_route') ?: 'unknown';
             $url = $request->getSchemeAndHttpHost().$event->getRequest()->getRequestUri();
             $startTime = $request->server->get('REQUEST_TIME');
-            $httpResponseCode = $response->getStatusCode();
-            $isSuccessful = $response->isSuccessful();
-            $controllerName = $this->getControllerName($request);
             $duration = 0;
-            $memoryUsage = 0;
+            $measurements = array();
             if ($this->stopwatch->isStarted(self::WATCH_NAME)) {
                 $profile = $this->stopwatch->stop(self::WATCH_NAME);
                 $duration = $profile->getDuration();
-                $memoryUsage = $profile->getMemory();
+                $measurements = array(
+                    'Memory Usage' => $profile->getMemory(),
+                );
             }
+            $properties = array(
+                'httpResponseCode' => $response->getStatusCode(),
+                'isSuccessful' => $response->isSuccessful(),
+                'Symfony Controller' => $this->getControllerName($request),
+                'Symfony Route' => $route,
+                'Symfony Environment' => $this->kernel->getEnvironment(),
+            );
 
-            $apmRequest->name = $route;
-            $apmRequest->url = $url;
-            $apmRequest->startTime = $startTime;
-            $apmRequest->duration = $duration;
-            $apmRequest->httpResponseCode = $httpResponseCode;
-            $apmRequest->isSuccessful = $isSuccessful;
-            $apmRequest->controller = $controllerName;
-            $apmRequest->route = $route;
-            $apmRequest->memory = $memoryUsage;
-            $apmRequest->environment = $this->kernel->getEnvironment();
-
-            $this->handler->trackRequest($apmRequest);
+            $this->handler->trackRequest($route, $url, $startTime, $duration, $properties, $measurements);
         }
     }
 

@@ -2,10 +2,9 @@
 
 namespace Berriart\Bundle\APMBundle\Client;
 
-use Berriart\Bundle\APMBundle\Model\Request;
 use Berriart\Bundle\APMBundle\Client\ClientInterface;
 
-class ClientHandler implements ClientHandlerInterface, BaseClientInterface
+class ClientHandler implements ClientHandlerInterface
 {
     private $clients;
 
@@ -33,20 +32,35 @@ class ClientHandler implements ClientHandlerInterface, BaseClientInterface
         return $this;
     }
 
-    public function trackException(\Exception $exception)
+    public function trackException(\Exception $exception, $properties = array(), $measurements = array())
     {
-        return $this->batch('trackException', $exception);
+        return $this->batch('trackException', array($exception, $properties, $measurements));
     }
 
-    public function trackRequest(Request $request)
+    public function trackRequest($name, $url, $startTime, $duration, $properties = array(), $measurements = array())
     {
-        return $this->batch('trackRequest', $request);
+        return $this->batch('trackRequest', array($name, $url, $startTime, $duration, $properties, $measurements));
     }
 
-    protected function batch($method, $argument)
+    public function trackEvent($name, $properties = array(), $measurements = array())
+    {
+        return $this->batch('trackEvent', array($name, $properties, $measurements));
+    }
+
+    public function trackMetric($name, $value, $properties = array())
+    {
+        return $this->batch('trackMetric', array($name, $value, $properties));
+    }
+
+    public function trackMessage($message, $properties = array())
+    {
+        return $this->batch('trackMessage', array($message, $properties));
+    }
+
+    protected function batch($method, $arguments)
     {
         foreach ($this->clients as $client) {
-            call_user_func(array($client, $method), $argument);
+            call_user_func_array(array($client, $method), $arguments);
         }
 
         return $this;

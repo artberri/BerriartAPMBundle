@@ -7,7 +7,7 @@ use Berriart\Bundle\APMBundle\Client\ClientInterface;
 /**
  * Interface that all Client Handlers must implement
  */
-interface ClientHandlerInterface
+interface ClientHandlerInterface extends BaseClientInterface
 {
     /**
      * Adds a client in the stack.

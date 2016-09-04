@@ -1,4 +1,4 @@
-# Installation
+# BerriartAPMBundle Installation
 
 Installation guide for BerriartAPMBundle.
 
@@ -81,4 +81,4 @@ of the bundle.
 
 The following documents are available:
 
-**TO DO**
+- [Command Usage](commands.md).
