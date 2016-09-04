@@ -23,7 +23,7 @@ controller name, route name and symfony environment name.
 - **Multi APM support**: you can use as many APM providers as you want. Usually only one is used but is usefull
 for migrations. If you APM provider is not supported by this bundle you can create your own and contribute to the project
 or make us a suggestion.
-- **APM Wrapper**: you will be able to use a unique interface for every integrated APM service.
+- **APM API Wrapper**: you will be able to use a unique interface for every integrated APM service.
 
 ## Documentation
 
@@ -38,6 +38,10 @@ All the installation instructions are located in the [documentation folder](Reso
 ## License
 
 This bundle is available under the [MIT License](LICENSE).
+
+## Contributing
+
+See the [contributing guide](CONTRIBUTING.md).
 
 # About
 
