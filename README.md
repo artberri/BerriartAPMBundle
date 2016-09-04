@@ -33,6 +33,8 @@ Features include:
 - **Request monitoring**: Every request is tracked including: status code, url, duration, memory usage,
 controller name, route name and symfony environment name.
 - **Exception tracking**: Every Symfony exception is tracked.
+- **Command tracking**: Every Symfony command execution is tracked including: name, arguments, options, duration and
+memory usage.
 - **Additional Command Line Tools**: A command for sending messages to the APM services. For example, you can use it
 for sending deployment notifications to your monitoring system.
 - **Multi APM support**: you can use as many APM providers as you want. Usually only one is used but is usefull

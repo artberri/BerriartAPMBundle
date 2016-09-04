@@ -1,11 +1,12 @@
 parameters:
-    berriart_apm.listener.class: Berriart\Bundle\APMBundle\EventListener\KernelListener
+    berriart_apm.listeners.kernel.class: Berriart\Bundle\APMBundle\EventListener\KernelListener
+    berriart_apm.listeners.console.class: Berriart\Bundle\APMBundle\EventListener\ConsoleListener
     berriart_apm.handler.class: Berriart\Bundle\APMBundle\Client\ClientHandler
     berriart_apm.client.app_insights.class: Berriart\Bundle\APMBundle\Client\AppInsightsClient
 
 services:
-    berriart_apm.listeners:
-        class: "%berriart_apm.listener.class%"
+    berriart_apm.listeners.kernel:
+        class: "%berriart_apm.listeners.kernel.class%"
         arguments: ['@kernel', '@berriart_apm.handler', '%berriart_apm.listener.rules%']
         tags:
             -  name: kernel.event_listener
@@ -19,6 +20,22 @@ services:
             -  name: kernel.event_listener
                event: kernel.terminate
                method: onKernelTerminate
+               priority: 0
+    berriart_apm.listeners.console:
+        class: "%berriart_apm.listeners.console.class%"
+        arguments: ['@kernel', '@berriart_apm.handler', '%berriart_apm.listener.rules%']
+        tags:
+            -  name: kernel.event_listener
+               event: console.command
+               method: onConsoleCommand
+               priority: 0
+            -  name: kernel.event_listener
+               event: console.exception
+               method: onConsoleException
+               priority: 0
+            -  name: kernel.event_listener
+               event: console.terminate
+               method: onConsoleTerminate
                priority: 0
     berriart_apm.handler:
         class: "%berriart_apm.handler.class%"

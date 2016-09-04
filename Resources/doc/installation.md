@@ -67,6 +67,7 @@ berriart_apm:
     listeners:
         exceptions: true # Track all exceptions automatically
         requests: true # Track all requests automatically
+        commands: true # Track all executed console commands automatically
     services:
         app_insights:
             api_key: ca8f0d5f-cce8-438c-aad7-71112d9a4379 # The integration key for VS Application Insights

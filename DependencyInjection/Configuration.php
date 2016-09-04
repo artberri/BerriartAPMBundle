@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->booleanNode('exceptions')->defaultTrue()->end()
                         ->booleanNode('requests')->defaultTrue()->end()
+                        ->booleanNode('commands')->defaultTrue()->end()
                     ->end()
                 ->end()
             ->end()
