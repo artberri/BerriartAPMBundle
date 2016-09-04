@@ -4,16 +4,22 @@
 
 Seamless integration between APM (Application Performance Monitoring) services and Symfony projects.
 
+**Important Note**: This Bundle is still in BETA stage. Breaking changes to the API can ocasionally be
+done until v1.0.0 is released. Use it with caution.
+
 ## Summary
 
 The BerriartAPMBundle integrates Symfony with APM services, it sends telemetry of various kinds
 (event, request, exception, etc.) to one or multiple APM services, to keep your application available,
 performing and succeeding.
 
-APM services included:
+APM services already included:
 
 - [Visual Studio Application Insights](https://azure.microsoft.com/en-us/services/application-insights/)
-- [New Relic](https://newrelic.com/) (coming soon)
+
+Coming soon:
+
+- [New Relic](https://newrelic.com/)
 
 Features include:
 
