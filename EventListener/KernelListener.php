@@ -23,12 +23,14 @@ class KernelListener
     protected $kernel;
     protected $handler;
     protected $stopWatch;
+    protected $rules;
 
-    public function __construct(AppKernel $kernel, ClientHandlerInterface $handler)
+    public function __construct(AppKernel $kernel, ClientHandlerInterface $handler, $rules)
     {
         $this->kernel = $kernel;
         $this->handler = $handler;
         $this->stopwatch = new Stopwatch();
+        $this->rules = $rules;
     }
 
     /**
@@ -38,10 +40,12 @@ class KernelListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        $exception = $event->getException();
+        if ($this->rules['exceptions']) {
+            $exception = $event->getException();
 
-        if (!$exception instanceof HttpExceptionInterface) {
-            $this->handler->trackException($exception);
+            if (!$exception instanceof HttpExceptionInterface) {
+                $this->handler->trackException($exception);
+            }
         }
     }
 
@@ -52,7 +56,7 @@ class KernelListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if ($this->isTrackableRequest($event)) {
+        if ($this->rules['requests'] && $this->isTrackableRequest($event)) {
             $this->stopwatch->start(self::WATCH_NAME);
         }
     }
@@ -64,7 +68,7 @@ class KernelListener
      */
     public function onKernelTerminate(PostResponseEvent $event)
     {
-        if ($this->isTrackableRequest($event)) {
+        if ($this->rules['requests'] && $this->isTrackableRequest($event)) {
             $apmRequest = new APMRequest();
 
             $request = $event->getRequest();

@@ -44,5 +44,7 @@ class BerriartAPMExtension extends Extension
             $container->setParameter('berriart_apm.clients', $sortedClients);
             $container->setParameter('berriart_apm.service.alias', $config['alias']);
         }
+
+        $container->setParameter('berriart_apm.listener.rules', $config['listeners']);
     }
 }

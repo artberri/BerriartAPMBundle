@@ -11,9 +11,10 @@ You need to have an account in at least one of the supported services to continu
 
 **Supported APM services on this version**
 
-- [Visual Studio Application Insights](https://azure.microsoft.com/en-us/services/application-insights/).
-Please see the [Getting an Application Insights Instrumentation Key](https://github.com/Microsoft/AppInsights-Home/wiki#getting-an-application-insights-instrumentation-key)
-section for more information.
+- [Visual Studio Application Insights](https://azure.microsoft.com/en-us/services/application-insights/): You need to get an Instrumentation
+Key to add it to the configuration, please see the [Getting an Application Insights Instrumentation Key](https://github.com/Microsoft/AppInsights-Home/wiki#getting-an-application-insights-instrumentation-key)
+section for more information. Don't forget [adding the client side SDK](https://azure.microsoft.com/en-gb/documentation/articles/app-insights-javascript/)
+in your `base.html.twig` file for full monitoring (sorry, we can't do this automatically).
 
 ## Installation
 
@@ -53,13 +54,26 @@ public function registerBundles()
 
 ### Step 3: Configure the BerriartAPMBundle
 
-Add the following configuration to your ``config.yml`` file according to which type
-of datastore you are using.
+Add the following configuration to your ``config.yml`` file according to which APM services
+you are using.
 
-TODO
+Bellow all configuration values are listed with their respective default values, but only the
+service configuration values are required to use the bundle (for example, if you are using
+Application Insights, the only required value is the `api_key`):
 
-Next Steps
-~~~~~~~~~~
+```yaml
+berriart_apm:
+    alias: berriart_apm # Alias for the APM service wrapper
+    listeners:
+        exceptions: true # Track all exceptions automatically
+        requests: true # Track all requests automatically
+    services:
+        app_insights:
+            api_key: ca8f0d5f-cce8-438c-aad7-71112d9a4379 # The integration key for VS Application Insights
+            priority: 0 # Sets the priority of the service (it will only affect the execution order)
+```
+
+### Next Steps
 
 Now that you have completed the basic installation and configuration of the
 BerriartAPMBundle, you are ready to learn about more advanced features and usages
@@ -67,4 +81,4 @@ of the bundle.
 
 The following documents are available:
 
-TODO
+**TO DO**

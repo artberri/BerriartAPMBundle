@@ -1,12 +1,12 @@
 parameters:
     berriart_apm.listener.class: Berriart\Bundle\APMBundle\EventListener\KernelListener
     berriart_apm.handler.class: Berriart\Bundle\APMBundle\Client\ClientHandler
-    berriart_apm.Client.app_insights.class: Berriart\Bundle\APMBundle\Client\AppInsightsClient
+    berriart_apm.client.app_insights.class: Berriart\Bundle\APMBundle\Client\AppInsightsClient
 
 services:
-    berriart_apm.listener.exception:
-        class: %berriart_apm.listener.class%
-        arguments: ['@kernel', '@berriart_apm.handler']
+    berriart_apm.listeners:
+        class: "%berriart_apm.listener.class%"
+        arguments: ['@kernel', '@berriart_apm.handler', '%berriart_apm.listener.rules%']
         tags:
             -  name: kernel.event_listener
                event: kernel.exception
@@ -21,8 +21,8 @@ services:
                method: onKernelTerminate
                priority: 0
     berriart_apm.handler:
-        class: %berriart_apm.handler.class%
-    berriart_apm.Client.app_insights:
-        class: %berriart_apm.Client.app_insights.class%
-    %berriart_apm.service.alias%:
+        class: "%berriart_apm.handler.class%"
+    berriart_apm.client.app_insights:
+        class: "%berriart_apm.Client.app_insights.class%"
+    "%berriart_apm.service.alias%":
         alias: berriart_apm.handler
