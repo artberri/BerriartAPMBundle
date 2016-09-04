@@ -22,26 +22,27 @@ class BerriartAPMExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        if (isset($config['processors'])) {
+        if (isset($config['services'])) {
             $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('services.yml');
+            $loader->load('apm.yml');
 
-            $processors = array();
+            $clients = array();
 
-            foreach ($config['processors'] as $name => $processor) {
-                $processors[$processor['priority']][] = $name;
-                $container->setParameter('berriart_apm.config.'.$name, $processor);
+            foreach ($config['services'] as $name => $client) {
+                $clients[$client['priority']][] = $name;
+                $container->setParameter('berriart_apm.config.'.$name, $client);
             }
 
-            ksort($processors);
-            $sortedProcessors = array();
-            foreach ($processors as $priorityProcessors) {
-                foreach (array_reverse($priorityProcessors) as $processor) {
-                    $sortedProcessors[] = $processor;
+            ksort($clients);
+            $sortedClients = array();
+            foreach ($clients as $priorityClients) {
+                foreach (array_reverse($priorityClients) as $client) {
+                    $sortedClients[] = $client;
                 }
             }
 
-            $container->setParameter('berriart_apm.processors', $sortedProcessors);
+            $container->setParameter('berriart_apm.clients', $sortedClients);
+            $container->setParameter('berriart_apm.service.alias', $config['alias']);
         }
     }
 }

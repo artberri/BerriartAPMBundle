@@ -21,9 +21,10 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('berriart_apm');
 
         $rootNode
-            ->fixXmlConfig('processor')
+            ->fixXmlConfig('service')
             ->children()
-                ->arrayNode('processors')
+                ->scalarNode('alias')->defaultValue('berriart_apm')->end()
+                ->arrayNode('services')
                     ->canBeUnset()
                     ->useAttributeAsKey('name')
                     ->prototype('array')

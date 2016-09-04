@@ -6,9 +6,9 @@ Seamless integration between APM (Application Performance Monitoring) services a
 
 ## Summary
 
-The BerriartAPMBundle integrates Symfony with APM services.
-It provides a flexible framework for user management that aims to handle
-common tasks such as user registration and password retrieval.
+The BerriartAPMBundle integrates Symfony with APM services, it sends telemetry of various kinds
+(event, request, exception, etc.) to one or multiple APM services, to keep your application available,
+performing and succeeding.
 
 APM services included:
 
@@ -17,12 +17,13 @@ APM services included:
 
 Features include:
 
+- **Request monitoring**: Every request is tracked including: status code, url, duration, memory usage,
+controller name, route name and symfony environment name.
+- **Exception tracking**: Every Symfony exception is tracked.
 - **Multi APM support**: you can use as many APM providers as you want. Usually only one is used but is usefull
 for migrations. If you APM provider is not supported by this bundle you can create your own and contribute to the project
 or make us a suggestion.
-- **Request monitoring**: Every request is tracked including: status code, url, duration, memory usage,
-constroller and symfony route name.
-- **Exception tracking**: Every Symfony exception is tracked.
+- **APM Wrapper**: you will be able to use a unique interface for every integrated APM service.
 
 ## Documentation
 

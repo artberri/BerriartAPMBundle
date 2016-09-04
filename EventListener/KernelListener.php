@@ -2,24 +2,33 @@
 
 namespace Berriart\Bundle\APMBundle\EventListener;
 
+use AppKernel;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Berriart\Bundle\APMBundle\Processor\ProcessorHandler;
+use Symfony\Component\Stopwatch\Stopwatch;
+use Berriart\Bundle\APMBundle\Client\ClientHandlerInterface;
+use Berriart\Bundle\APMBundle\Model\Request as APMRequest;
 
 /**
  * Tracks exceptions on APM
  */
 class KernelListener
 {
-    protected $handler;
+    const WATCH_NAME = 'berriart_apm.request';
 
-    public function __construct(ProcessorHandler $handler)
+    protected $kernel;
+    protected $handler;
+    protected $stopWatch;
+
+    public function __construct(AppKernel $kernel, ClientHandlerInterface $handler)
     {
+        $this->kernel = $kernel;
         $this->handler = $handler;
+        $this->stopwatch = new Stopwatch();
     }
 
     /**
@@ -43,9 +52,8 @@ class KernelListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-
         if ($this->isTrackableRequest($event)) {
-            $this->handler->trackRequest($event);
+            $this->stopwatch->start(self::WATCH_NAME);
         }
     }
 
@@ -57,11 +65,41 @@ class KernelListener
     public function onKernelTerminate(PostResponseEvent $event)
     {
         if ($this->isTrackableRequest($event)) {
-            $this->handler->trackResponse($event);
+            $apmRequest = new APMRequest();
+
+            $request = $event->getRequest();
+            $response = $event->getResponse();
+
+            $route = $request->get('_route') ?: 'unknown';
+            $url = $request->getSchemeAndHttpHost().$event->getRequest()->getRequestUri();
+            $startTime = $request->server->get('REQUEST_TIME');
+            $httpResponseCode = $response->getStatusCode();
+            $isSuccessful = $response->isSuccessful();
+            $controllerName = $this->getControllerName($request);
+            $duration = 0;
+            $memoryUsage = 0;
+            if ($this->stopwatch->isStarted(self::WATCH_NAME)) {
+                $profile = $this->stopwatch->stop(self::WATCH_NAME);
+                $duration = $profile->getDuration();
+                $memoryUsage = $profile->getMemory();
+            }
+
+            $apmRequest->name = $route;
+            $apmRequest->url = $url;
+            $apmRequest->startTime = $startTime;
+            $apmRequest->duration = $duration;
+            $apmRequest->httpResponseCode = $httpResponseCode;
+            $apmRequest->isSuccessful = $isSuccessful;
+            $apmRequest->controller = $controllerName;
+            $apmRequest->route = $route;
+            $apmRequest->memory = $memoryUsage;
+            $apmRequest->environment = $this->kernel->getEnvironment();
+
+            $this->handler->trackRequest($apmRequest);
         }
     }
 
-    private function isTrackableRequest(KernelEvent $event)
+    protected function isTrackableRequest(KernelEvent $event)
     {
         $uri = $event->getRequest()->getRequestUri();
         if ($event->isMasterRequest() && !preg_match('#^/_profiler|^/_wdt#', $uri)) {
@@ -69,5 +107,26 @@ class KernelListener
         }
 
         return false;
+    }
+
+    protected function getControllerName(Request $request)
+    {
+        if (!$controller = $request->attributes->get('_controller')) {
+            return false;
+        }
+
+        if (is_array($controller)) {
+            return $controller;
+        }
+
+        if (is_object($controller)) {
+            if (method_exists($controller, '__invoke')) {
+                return $controller;
+            }
+
+            return false;
+        }
+
+        return $controller;
     }
 }
