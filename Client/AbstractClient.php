@@ -2,8 +2,6 @@
 
 namespace Berriart\Bundle\APMBundle\Client;
 
-use ApplicationInsights\Telemetry_Client as Client;
-
 abstract class AbstractClient implements ClientInterface
 {
     protected function addDefaultProperties($properties)
