@@ -51,49 +51,51 @@ class ConsoleListener
      */
     public function onConsoleTerminate(ConsoleTerminateEvent $event)
     {
-        $command = $event->getCommand();
-        $input = $event->getInput();
+        if ($this->rules['commands']) {
+            $command = $event->getCommand();
+            $input = $event->getInput();
 
-        $properties = array(
-            'Symfony Command Name' => $command->getName(),
-            'Symfony Environment' => $this->kernel->getEnvironment(),
-        );
-
-        foreach ($input->getOptions() as $key => $value) {
-            $key = 'Option: '.$key;
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    $properties[$key.'['.$k.']'] = $v;
-                }
-
-                continue;
-            }
-
-            $properties[$key] = $value;
-        }
-
-        foreach ($input->getArguments() as $key => $value) {
-            $key = 'Argument: '.$key;
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    $properties[$key.'['.$k.']'] = $v;
-                }
-
-                continue;
-            }
-
-            $properties[$key] = $value;
-        }
-
-        $measurements = array();
-        if ($this->stopwatch->isStarted(self::WATCH_NAME)) {
-            $profile = $this->stopwatch->stop(self::WATCH_NAME);
-            $measurements = array(
-                'Memory Usage' => $profile->getMemory(),
-                'Execution Duration' => $profile->getDuration(),
+            $properties = array(
+                'Symfony Command Name' => $command->getName(),
+                'Symfony Environment' => $this->kernel->getEnvironment(),
             );
-        }
 
-        $this->handler->trackEvent('Symfony Command Execution', $properties, $measurements);
+            foreach ($input->getOptions() as $key => $value) {
+                $key = 'Option: '.$key;
+                if (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        $properties[$key.'['.$k.']'] = $v;
+                    }
+
+                    continue;
+                }
+
+                $properties[$key] = $value;
+            }
+
+            foreach ($input->getArguments() as $key => $value) {
+                $key = 'Argument: '.$key;
+                if (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        $properties[$key.'['.$k.']'] = $v;
+                    }
+
+                    continue;
+                }
+
+                $properties[$key] = $value;
+            }
+
+            $measurements = array();
+            if ($this->stopwatch->isStarted(self::WATCH_NAME)) {
+                $profile = $this->stopwatch->stop(self::WATCH_NAME);
+                $measurements = array(
+                    'Memory Usage' => $profile->getMemory(),
+                    'Execution Duration' => $profile->getDuration(),
+                );
+            }
+
+            $this->handler->trackEvent('Symfony Command Execution', $properties, $measurements);
+        }
     }
 }
