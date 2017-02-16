@@ -24,5 +24,5 @@ interface ClientInterface extends BaseClientInterface
      *
      * @return boolean
      */
-    public function getThrowExceptions();
+    public function hasToThrowExceptions();
 }

@@ -63,7 +63,7 @@ class ClientHandler implements ClientHandlerInterface
             try {
                 call_user_func_array(array($client, $method), $arguments);
             } catch (\Exception $e) {
-                $throwExceptions = call_user_func_array(array($client, 'getThrowExceptions'), []);
+                $throwExceptions = call_user_func_array(array($client, 'hasToThrowExceptions'), []);
                 if ($throwExceptions) {
                     throw $e;
                 }

@@ -21,7 +21,7 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
         return $this->client;
     }
 
-    public function getThrowExceptions()
+    public function hasToThrowExceptions()
     {
         return $this->throwExceptions;
     }
