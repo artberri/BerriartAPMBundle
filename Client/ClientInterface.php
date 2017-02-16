@@ -18,4 +18,11 @@ interface ClientInterface extends BaseClientInterface
      * @return Original APM Client
      */
     public function getOriginalClient();
+
+    /**
+     * Gets if the client must throw the exceptions
+     *
+     * @return boolean
+     */
+    public function getThrowExceptions();
 }

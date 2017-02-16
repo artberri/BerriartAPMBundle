@@ -7,16 +7,23 @@ use ApplicationInsights\Telemetry_Client as Client;
 class AppInsightsClient extends AbstractClient implements ClientInterface
 {
     protected $client;
+    protected $throwExceptions;
 
     public function configure($config)
     {
         $this->client = new Client();
         $this->client->getContext()->setInstrumentationKey($config['api_key']);
+        $this->throwExceptions = $config['throw_exceptions'];
     }
 
     public function getOriginalClient()
     {
         return $this->client;
+    }
+
+    public function getThrowExceptions()
+    {
+        return $this->throwExceptions;
     }
 
     public function trackException(\Exception $exception, $properties = array(), $measurements = array())

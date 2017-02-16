@@ -72,6 +72,7 @@ berriart_apm:
         app_insights:
             api_key: ca8f0d5f-cce8-438c-aad7-71112d9a4379 # The integration key for VS Application Insights
             priority: 0 # Sets the priority of the service (it will only affect the execution order)
+            throw_exceptions: true # Variable to set if you want to stop propagation of the exception or not
 ```
 
 ### Next Steps

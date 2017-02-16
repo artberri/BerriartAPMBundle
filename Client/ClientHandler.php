@@ -60,7 +60,14 @@ class ClientHandler implements ClientHandlerInterface
     protected function batch($method, $arguments)
     {
         foreach ($this->clients as $client) {
-            call_user_func_array(array($client, $method), $arguments);
+            try {
+                call_user_func_array(array($client, $method), $arguments);
+            } catch (\Exception $e) {
+                $throwExceptions = call_user_func_array(array($client, 'getThrowExceptions'), []);
+                if ($throwExceptions) {
+                    throw $e;
+                }
+            }
         }
 
         return $this;
