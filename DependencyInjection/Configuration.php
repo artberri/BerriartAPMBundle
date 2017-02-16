@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('api_key')->end()
                             ->scalarNode('priority')->defaultValue(0)->end()
+                            ->scalarNode('throw_exceptions')->defaultTrue()->end()
                         ->end()
                     ->end()
                 ->end()
