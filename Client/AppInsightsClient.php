@@ -29,8 +29,12 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
     public function trackException(\Exception $exception, $properties = array(), $measurements = array())
     {
         $properties = $this->addDefaultProperties($properties);
-        $this->client->trackException($exception, $properties, $measurements);
-        $this->client->flush();
+
+        try {
+            $this->client->trackException($exception, $properties, $measurements);
+            $this->client->flush();
+        } catch (\Exception $e) {
+        }
     }
 
     public function trackRequest($name, $url, $startTime, $duration, $properties = array(), $measurements = array())
@@ -41,17 +45,20 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
         $customProperties = $this->splitArray($propertyNames, $properties);
         $properties = $this->addDefaultProperties($properties);
 
-        $this->client->trackRequest(
-            $name,
-            $url,
-            $startTime,
-            $duration,
-            $customProperties['httpResponseCode'],
-            $customProperties['isSuccessful'],
-            $properties,
-            $measurements
-        );
-        $this->client->flush();
+        try {
+            $this->client->trackRequest(
+                $name,
+                $url,
+                $startTime,
+                $duration,
+                $customProperties['httpResponseCode'],
+                $customProperties['isSuccessful'],
+                $properties,
+                $measurements
+            );
+            $this->client->flush();
+        } catch (\Exception $e) {
+        }
     }
 
     public function trackMetric($name, $value, $properties = array())
@@ -60,33 +67,42 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
         $customProperties = $this->splitArray($propertyNames, $properties);
         $properties = $this->addDefaultProperties($properties);
 
-        $this->client->trackMetric(
-            $name,
-            $value,
-            $customProperties['type'],
-            $customProperties['count'],
-            $customProperties['min'],
-            $customProperties['max'],
-            $customProperties['stdDev'],
-            $properties
-        );
-        $this->client->flush();
+        try {
+            $this->client->trackMetric(
+                $name,
+                $value,
+                $customProperties['type'],
+                $customProperties['count'],
+                $customProperties['min'],
+                $customProperties['max'],
+                $customProperties['stdDev'],
+                $properties
+            );
+            $this->client->flush();
+        } catch (\Exception $e) {
+        }
     }
 
     public function trackEvent($name, $properties = array(), $measurements = array())
     {
         $properties = $this->addDefaultProperties($properties);
 
-        $this->client->trackEvent($name, $properties, $measurements);
-        $this->client->flush();
+        try {
+            $this->client->trackEvent($name, $properties, $measurements);
+            $this->client->flush();
+        } catch (\Exception $e) {
+        }
     }
 
     public function trackMessage($message, $properties = array())
     {
         $properties = $this->addDefaultProperties($properties);
 
-        $this->client->trackEvent($message, $properties);
-        $this->client->flush();
+        try {
+            $this->client->trackEvent($message, $properties);
+            $this->client->flush();
+        } catch (\Exception $e) {
+        }
     }
 
     protected function splitArray($propertyNames, &$properties)
