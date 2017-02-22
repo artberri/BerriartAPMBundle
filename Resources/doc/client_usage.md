@@ -22,11 +22,12 @@ $apmClient = $container->get('berriart_apm');
 Check the documentation in the [`Berriart\Bundle\APMBundle\Client/BaseClientInterface.php`](../../Client/BaseClientInterface.php)
 interface to see the documentation about the available public methods:
 
-- `$apmClient->trackException(\Exception $exception, $properties = array(), $measurements = array());`
-- `$apmClient->trackRequest($name, $url, $startTime, $duration, $properties = array(), $measurements = array());`
-- `$apmClient->trackEvent($name, $properties = array(), $measurements = array());`
-- `$apmClient->trackMetric($name, $value, $properties = array());`
-- `$apmClient->trackMessage($message, $properties = array());`
+- `$apmClient->trackException(\Exception $exception, $properties = [], $measurements = []);`
+- `$apmClient->trackRequest($name, $url, $startTime, $duration, $properties = [], $measurements = []);`
+- `$apmClient->trackEvent($name, $properties = [], $measurements = []);`
+- `$apmClient->trackMetric($name, $value, $properties = []);`
+- `$apmClient->trackMessage($message, $properties = []);`
+- `$apmClient->trackDependency($name, $type = 0, $commandName = null, $startTime = null, $durationInMilliseconds = 0, $isSuccessful = true, $resultCode = null, $isAsync = null, $properties = []);`
 
 ## Other documentation
 

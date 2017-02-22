@@ -13,7 +13,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use Berriart\Bundle\APMBundle\Client\ClientHandlerInterface;
 
 /**
- * Tracks exceptions on APM
+ * Attaching actions to kernel events
  */
 class KernelListener
 {
@@ -75,24 +75,27 @@ class KernelListener
             $url = $request->getSchemeAndHttpHost().$event->getRequest()->getRequestUri();
             $startTime = $request->server->get('REQUEST_TIME');
             $duration = 0;
-            $measurements = array();
+            $measurements = [];
             if ($this->stopwatch->isStarted(self::WATCH_NAME)) {
                 $profile = $this->stopwatch->stop(self::WATCH_NAME);
                 $duration = $profile->getDuration();
-                $measurements = array(
+                $measurements = [
                     'Memory Usage' => $profile->getMemory(),
-                );
+                ];
             }
-            $properties = array(
+            $properties = [
                 'httpResponseCode' => $response->getStatusCode(),
                 'isSuccessful' => $response->isSuccessful(),
                 'Symfony Controller' => $this->getControllerName($request),
                 'Symfony Route' => $route,
                 'Symfony Environment' => $this->kernel->getEnvironment(),
-            );
+            ];
 
             $this->handler->trackRequest($route, $url, $startTime, $duration, $properties, $measurements);
         }
+
+        // Send any pending telemetry
+        $this->handler->flush();
     }
 
     protected function isTrackableRequest(KernelEvent $event)

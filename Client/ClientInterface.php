@@ -25,4 +25,9 @@ interface ClientInterface extends BaseClientInterface
      * @return boolean
      */
     public function hasToThrowExceptions();
+
+    /**
+     * Send every pending telemetry
+     */
+    public function flush();
 }

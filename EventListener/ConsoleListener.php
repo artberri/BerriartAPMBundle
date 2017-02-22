@@ -55,10 +55,10 @@ class ConsoleListener
             $command = $event->getCommand();
             $input = $event->getInput();
 
-            $properties = array(
+            $properties = [
                 'Symfony Command Name' => $command->getName(),
                 'Symfony Environment' => $this->kernel->getEnvironment(),
-            );
+            ];
 
             foreach ($input->getOptions() as $key => $value) {
                 $key = 'Option: '.$key;
@@ -86,16 +86,19 @@ class ConsoleListener
                 $properties[$key] = $value;
             }
 
-            $measurements = array();
+            $measurements = [];
             if ($this->stopwatch->isStarted(self::WATCH_NAME)) {
                 $profile = $this->stopwatch->stop(self::WATCH_NAME);
-                $measurements = array(
+                $measurements = [
                     'Memory Usage' => $profile->getMemory(),
                     'Execution Duration' => $profile->getDuration(),
-                );
+                ];
             }
 
             $this->handler->trackEvent('Symfony Command Execution', $properties, $measurements);
         }
+
+        // Send any pending telemetry
+        $this->handler->flush();
     }
 }

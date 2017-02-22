@@ -8,7 +8,9 @@
                      http://pmd.sf.net/ruleset_xml_schema.xsd">
     <description>BerriartSitemapBundle PHP Mess Detector</description>
 
-    <rule ref="vendor/phpmd/phpmd/src/main/resources/rulesets/cleancode.xml" />
+    <rule ref="vendor/phpmd/phpmd/src/main/resources/rulesets/cleancode.xml">
+        <exclude name="BooleanArgumentFlag" />
+    </rule>
     <rule ref="vendor/phpmd/phpmd/src/main/resources/rulesets/codesize.xml" />
     <rule ref="vendor/phpmd/phpmd/src/main/resources/rulesets/controversial.xml/Superglobals" />
     <rule ref="vendor/phpmd/phpmd/src/main/resources/rulesets/design.xml" />

@@ -26,7 +26,7 @@ class BerriartAPMExtension extends Extension
             $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
             $loader->load('apm.yml');
 
-            $clients = array();
+            $clients = [];
 
             foreach ($config['services'] as $name => $client) {
                 $clients[$client['priority']][] = $name;
@@ -34,7 +34,7 @@ class BerriartAPMExtension extends Extension
             }
 
             ksort($clients);
-            $sortedClients = array();
+            $sortedClients = [];
             foreach ($clients as $priorityClients) {
                 foreach (array_reverse($priorityClients) as $client) {
                     $sortedClients[] = $client;

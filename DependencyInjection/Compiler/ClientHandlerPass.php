@@ -29,10 +29,10 @@ class ClientHandlerPass implements CompilerPassInterface
 
             $definition->addMethodCall(
                 'addClient',
-                array(new Reference($serviceId), $client)
+                [new Reference($serviceId), $client]
             );
             $clientDefintion = $container->getDefinition($serviceId);
-            $clientDefintion->addMethodCall('configure', array( $container->getParameter('berriart_apm.config.'.$client)));
+            $clientDefintion->addMethodCall('configure', [$container->getParameter('berriart_apm.config.'.$client)]);
         }
     }
 }

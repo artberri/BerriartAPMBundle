@@ -33,4 +33,11 @@ interface ClientHandlerInterface extends BaseClientInterface
      * @return self
      */
     public function removeClient($clientName);
+
+    /**
+     * Sending any pending telemetry.
+     *
+     * @return self
+     */
+    public function flush();
 }

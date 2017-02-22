@@ -14,6 +14,7 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
         $this->client = new Client();
         $this->client->getContext()->setInstrumentationKey($config['api_key']);
         $this->throwExceptions = $config['throw_exceptions'];
+        $this->sendOnTerminate = $config['send_onterminate'];
     }
 
     public function getOriginalClient()
@@ -26,18 +27,18 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
         return $this->throwExceptions;
     }
 
-    public function trackException(\Exception $exception, $properties = array(), $measurements = array())
+    public function trackException(\Exception $exception, $properties = [], $measurements = [])
     {
         $properties = $this->addDefaultProperties($properties);
         $this->client->trackException($exception, $properties, $measurements);
-        $this->client->flush();
+        $this->queue();
     }
 
-    public function trackRequest($name, $url, $startTime, $duration, $properties = array(), $measurements = array())
+    public function trackRequest($name, $url, $startTime, $duration, $properties = [], $measurements = [])
     {
-        $customProperties = array();
+        $customProperties = [];
 
-        $propertyNames = array('httpResponseCode', 'isSuccessful');
+        $propertyNames = ['httpResponseCode', 'isSuccessful'];
         $customProperties = $this->splitArray($propertyNames, $properties);
         $properties = $this->addDefaultProperties($properties);
 
@@ -51,12 +52,12 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
             $properties,
             $measurements
         );
-        $this->client->flush();
+        $this->queue();
     }
 
-    public function trackMetric($name, $value, $properties = array())
+    public function trackMetric($name, $value, $properties = [])
     {
-        $propertyNames = array('type', 'count', 'min', 'max', 'stdDev');
+        $propertyNames = ['type', 'count', 'min', 'max', 'stdDev'];
         $customProperties = $this->splitArray($propertyNames, $properties);
         $properties = $this->addDefaultProperties($properties);
 
@@ -70,28 +71,60 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
             $customProperties['stdDev'],
             $properties
         );
-        $this->client->flush();
+        $this->queue();
     }
 
-    public function trackEvent($name, $properties = array(), $measurements = array())
+    public function trackEvent($name, $properties = [], $measurements = [])
     {
         $properties = $this->addDefaultProperties($properties);
 
         $this->client->trackEvent($name, $properties, $measurements);
-        $this->client->flush();
+        $this->queue();
     }
 
-    public function trackMessage($message, $properties = array())
+    public function trackMessage($message, $properties = [])
     {
         $properties = $this->addDefaultProperties($properties);
 
         $this->client->trackEvent($message, $properties);
+        $this->queue();
+    }
+
+    public function trackDependency(
+        $name,
+        $type = \ApplicationInsights\Channel\Contracts\Dependency_Type::OTHER,
+        $commandName = null,
+        $startTime = null,
+        $durationInMs = 0,
+        $isSuccessful = true,
+        $resultCode = null,
+        $isAsync = null,
+        $properties = []
+    ) {
+        $properties = $this->addDefaultProperties($properties);
+
+        $this->client->trackDependency(
+            $name,
+            $type,
+            $commandName,
+            $startTime,
+            $durationInMs,
+            $isSuccessful,
+            $resultCode,
+            $isAsync,
+            $properties
+        );
+        $this->queue();
+    }
+
+    public function flush()
+    {
         $this->client->flush();
     }
 
     protected function splitArray($propertyNames, &$properties)
     {
-        $customProperties = array();
+        $customProperties = [];
 
         foreach ($propertyNames as $name) {
             $customProperties[$name] = null;
@@ -102,5 +135,13 @@ class AppInsightsClient extends AbstractClient implements ClientInterface
         }
 
         return $customProperties;
+    }
+
+    protected function queue()
+    {
+        // Is only sended inmediately when `send_onterminate` is not active
+        if (!$this->sendOnTerminate) {
+            $this->client->flush();
+        }
     }
 }
