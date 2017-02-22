@@ -9,7 +9,7 @@ This version of the bundle requires Symfony >=2.6 and PHP >=5.4.2.
 This bundle is intended to work with third party APM (Application Performance Monitoring) services.
 You need to have an account in at least one of the supported services to continue.
 
-**Supported APM services on this version**
+### Supported APM services on this version
 
 - [Visual Studio Application Insights](https://azure.microsoft.com/en-us/services/application-insights/): You need to get an Instrumentation
 Key to add it to the configuration, please see the [Getting an Application Insights Instrumentation Key](https://github.com/Microsoft/AppInsights-Home/wiki#getting-an-application-insights-instrumentation-key)
@@ -21,15 +21,15 @@ in your `base.html.twig` file for full monitoring (sorry, we can't do this autom
 Installation is a quick 3 step process:
 
 1. Download BerriartAPMBundle using composer
-2. Enable the Bundle
-3. Configure the BerriartAPMBundle
+1. Enable the Bundle
+1. Configure the BerriartAPMBundle
 
 ### Step 1: Download FOSUserBundle using composer
 
 Require the bundle with composer:
 
 ```bash
-$ composer require berriart/apm-bundle
+composer require berriart/apm-bundle
 ```
 
 Composer will install the bundle to your project's `vendor/berriart/apm-bundle` directory.

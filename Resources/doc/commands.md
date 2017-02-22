@@ -23,7 +23,7 @@ The command takes only one argument, the message to be sent.
 For example if you wanted to send a deployment message, you would run the command as follows.
 
 ```bash
-$ php bin/console apm:track:message "Release v1.4.2"
+php bin/console apm:track:message "Release v1.4.2"
 ```
 
 ## Other documentation

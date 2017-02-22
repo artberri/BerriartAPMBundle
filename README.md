@@ -62,6 +62,6 @@ This bundle is available under the [MIT License](LICENSE).
 
 See the [contributing guide](CONTRIBUTING.md).
 
-# About
+## About
 
 BerriartAPMBundle is a [Berriart](http://www.berriart.com) initiative.
