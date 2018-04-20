@@ -40,6 +40,6 @@ services:
     berriart_apm.handler:
         class: "%berriart_apm.handler.class%"
     berriart_apm.client.app_insights:
-        class: "%berriart_apm.Client.app_insights.class%"
+        class: "%berriart_apm.client.app_insights.class%"
     "%berriart_apm.service.alias%":
         alias: berriart_apm.handler
