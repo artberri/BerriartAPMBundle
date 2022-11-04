@@ -1,3 +1,6 @@
+> **Warning**
+> This project is not maintained anymore
+
 # BerriartAPMBundle
 
 [![Build Status](https://travis-ci.org/artberri/BerriartAPMBundle.svg?branch=master)](https://travis-ci.org/artberri/BerriartAPMBundle)
